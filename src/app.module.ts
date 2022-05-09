@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import {TypeOrmModule, TypeOrmModuleOptions} from "@nestjs/typeorm";
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import {ConfigModule, ConfigService} from '@nestjs/config'
+import { UsersModule } from './users/users.module';
 import * as Joi from "joi";
 
 
@@ -20,6 +21,7 @@ const typeOrmModuleOptions = {
         database:configService.get("DB_DATABASE"),
         entities:[],
         synchronize:true, // set 'false' in production // 후에 마이그레이션 해서 사용
+        timezone: 'local',
         autoLoadEntities:true,
         logging:true,
         keepConnectionAlive:true, // 연결할때까지 시도
@@ -45,6 +47,7 @@ const typeOrmModuleOptions = {
           })
       }),
       TypeOrmModule.forRootAsync(typeOrmModuleOptions),
+      UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
