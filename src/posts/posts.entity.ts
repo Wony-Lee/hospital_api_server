@@ -29,10 +29,10 @@ export class PostsEntity extends  CommonEntity {
     category: string
 
     @IsString()
-    @Column({ type:'varchar', nullable: false })
+    @Column({ type:'varchar', nullable: true })
     doctor: string
 
     @IsString()
-    @Column( { type:'varchar', nullable: false })
+    @Column( { type:'varchar', nullable: true })
     patientState: string
 }

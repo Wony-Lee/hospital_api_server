@@ -3,6 +3,7 @@ import {PostsEntity} from "./posts.entity";
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {PostsDTO} from "./dtos/posts.dto";
+import {validationCheck} from "../common/utils/validationCheck";
 
 @Injectable()
 export class PostsService {
@@ -20,8 +21,10 @@ export class PostsService {
 
     async createPosts(postsDTO: PostsDTO): Promise<void> {
         const { hospitalName, address, phoneNumber, category } = postsDTO
-        if(!hospitalName) throw new Error();
-        console.log(hospitalName)
+        validationCheck({ hospitalName, address, phoneNumber, category })
+        await this.postsRepository.save({
+            ...postsDTO
+        })
     }
-
 }
+
