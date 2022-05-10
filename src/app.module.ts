@@ -6,6 +6,8 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import {ConfigModule, ConfigService} from '@nestjs/config'
 import { UsersModule } from './users/users.module';
 import * as Joi from "joi";
+import {UserEntity} from "./users/users.entity";
+import { PostsModule } from './posts/posts.module';
 
 
 const typeOrmModuleOptions = {
@@ -19,7 +21,7 @@ const typeOrmModuleOptions = {
         username:configService.get('DB_USERNAME'),
         password:configService.get('DB_PASSWORD'),
         database:configService.get("DB_DATABASE"),
-        entities:[],
+        entities:[UserEntity],
         synchronize:true, // set 'false' in production // 후에 마이그레이션 해서 사용
         timezone: 'local',
         autoLoadEntities:true,
@@ -48,6 +50,7 @@ const typeOrmModuleOptions = {
       }),
       TypeOrmModule.forRootAsync(typeOrmModuleOptions),
       UsersModule,
+      PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

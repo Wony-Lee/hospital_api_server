@@ -19,7 +19,7 @@ export class UsersController {
     @Get()
     async getCurrentUser() { return "Hello User" }
 
-    @Post()
+    @Post('signUp')
     async signup(@Body() userRegisterDTO: UserRegisterDTO) {
         return await this.userService.registerUser(userRegisterDTO)
     }
