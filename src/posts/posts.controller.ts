@@ -1,9 +1,13 @@
-import {Body, Controller, Get, Logger, Post} from '@nestjs/common';
+import {Body, Controller, Get, Logger, Post, UseGuards, UseInterceptors} from '@nestjs/common';
 import {PostsService} from "./posts.service";
 import {InjectRepository} from "@nestjs/typeorm";
 import {PostsEntity} from "./posts.entity";
 import {Repository} from "typeorm";
 import {PostsDTO} from "./dtos/posts.dto";
+import {JwtAuthGuard} from "../users/jwt/jwt.guard";
+import {OnlyPrivateInterceptor} from "../common/interceptors/only-private.interceptor";
+import {CurrentUser} from "../common/decorators/current-user.decotator";
+import {UserDTO} from "../users/dtos/user.dto";
 
 @Controller('posts')
 export class PostsController {
@@ -13,9 +17,7 @@ export class PostsController {
         private readonly postsService: PostsService,
         @InjectRepository(PostsEntity)
         private readonly postsRepository: Repository<PostsEntity>
-    )
-    {}
-
+    ){}
 
     @Get()
     async getPosts() {
@@ -23,8 +25,10 @@ export class PostsController {
     }
 
     @Post()
-    async createPost(@Body() postsDTO: PostsDTO) {
-        console.log('body Item',postsDTO)
+    @UseGuards(JwtAuthGuard)
+    // @UseInterceptors(OnlyPrivateInterceptor)
+    async createPost(@CurrentUser() currentUser: UserDTO, @Body() postsDTO: PostsDTO) {
+        console.log('currentUser ========> ',currentUser)
         return this.postsService.createPosts(postsDTO)
     }
 }

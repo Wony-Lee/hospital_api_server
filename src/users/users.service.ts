@@ -15,15 +15,16 @@ export class UsersService {
 
     constructor(
         @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>,
+        private readonly usersRepository: Repository<UserEntity>,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService
     ) {}
 
     async findUserById(id: string) {
         try {
-            const user = await this.userRepository.findOne({id})
+            const user = await this.usersRepository.findOne({id})
             if(!user) throw new Error()
+            return user;
         } catch(error) {
             throw new BadRequestException('해당하는 사용자를 찾을 수 없습니다.')
         }
@@ -31,9 +32,10 @@ export class UsersService {
 
     async verifyUserAndSignJwt(
         email:UserLoginDTO['email'],
-        password:UserLoginDTO['password']):Promise<{jwt: string; user:UserDTO}>
+        password:UserLoginDTO['password'])
+        :Promise<{jwt: string; user:UserDTO}>
     {
-        const user = await this.userRepository.findOne({email})
+        const user = await this.usersRepository.findOne({email})
         if(!user) {
             throw new UnauthorizedException('해당하는 이메일이 존재하지 않습니다.')
         }
@@ -53,15 +55,14 @@ export class UsersService {
     async registerUser(userRegisterDTO: UserRegisterDTO):Promise<void> {
         const { email, password } = userRegisterDTO
         console.log('email, password',email,password)
-        const user = await this.userRepository.findOne({email})
+        const user = await this.usersRepository.findOne({email})
         if(user) {
             throw new UnauthorizedException('이미 존재하는 이메일 입니다.')
         }
         const hashedPassword = await bcrypt.hash(password, 10)
-        await this.userRepository.save({
+        await this.usersRepository.save({
             ...userRegisterDTO,
             password:hashedPassword
         })
     }
-
 }

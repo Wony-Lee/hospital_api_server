@@ -23,9 +23,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         try {
             const user = await this.usersService.findUserById(payload.sub)
             // @ts-ignore
-            if(user) {
+            if (user) {
                 return user;
             } else {
+                console.log('========>1')
                 throw new Error('존재하지 않는 유저 입니다.')
             }
         } catch (error) {

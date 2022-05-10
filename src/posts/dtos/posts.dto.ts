@@ -12,7 +12,7 @@ export class PostsDTO extends PickType(PostsEntity, ['hospitalName', 'address', 
     @IsNotEmpty({message: '병원 주소를 입력해주세요.'})
     address:string
 
-    @IsPhoneNumber()
+    @IsPhoneNumber('KR')
     @IsNotEmpty({message: '병원 연락처를 입력해주세요.'})
     phoneNumber:number
 
