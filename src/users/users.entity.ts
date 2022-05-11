@@ -62,10 +62,9 @@ export class UserEntity extends CommonEntity {
     @Column({type : 'boolean', default: false})
     isAdmin:boolean
 
-    // @OneToOne(() => PostsEntity)
-    // @JoinColumn({name : 'post_id', referencedColumnName: 'id'})
-    // posts: PostsEntity
-
+    @OneToOne(() => PostsEntity)
+    @JoinColumn({name : 'post_id', referencedColumnName: 'hospitalName'})
+    post: PostsEntity
 
     @OneToMany(() => PostsEntity, (post: PostsEntity) => post.author, {
         cascade: true,

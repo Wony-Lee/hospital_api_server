@@ -1,6 +1,6 @@
 import {Column, Entity, Index, JoinColumn, ManyToOne, OneToOne} from "typeorm";
 import {CommonEntity} from "../common/entities/common.entity";
-import {IsNotEmpty, IsNumber, IsPhoneNumber, IsString} from "class-validator";
+import {IsIP, IsNotEmpty, IsNumber, IsPhoneNumber, IsString} from "class-validator";
 import {UserEntity} from "../users/users.entity";
 import {ApiProperty} from "@nestjs/swagger";
 
@@ -54,11 +54,19 @@ export class PostsEntity extends  CommonEntity {
 
     @IsString()
     @Column({ type:'varchar', nullable: true })
+    imgUrl:string
+
+    @IsString()
+    @Column({ type:'varchar', nullable: true })
     doctor: string
 
     @IsString()
     @Column( { type:'varchar', nullable: true })
     patientState: string
+
+    @IsString()
+    @Column({type:'varchar', nullable:false})
+    userId: string
 
     @ManyToOne(() => UserEntity, (author: UserEntity) => author.posts, {
         onDelete:'CASCADE', // 사용자가 삭제되면 포스트도 삭제된다.

@@ -8,6 +8,7 @@ import * as cookieParser from "cookie-parser";
 import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import {HttpApiExceptionFilter} from "./common/exceptions/http-api-exception-filter";
 import * as expressSession from 'express-session';
+import * as path from "path";
 
 
 class Application {
@@ -78,6 +79,9 @@ class Application {
     )
     this.server.use(passport.initialize())
     this.server.use(passport.session())
+    this.server.useStaticAssets(path.join(__dirname, './common', 'uploads'), {
+      prefix: '/image'
+    })
     this.server.useGlobalInterceptors(
         new ClassSerializerInterceptor(this.server.get(Reflector)),
     )
