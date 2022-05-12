@@ -51,6 +51,8 @@ export class PostsService {
     }
 
     async uploadImg(post: PostsEntity, files:Express.Multer.File[]) {
+        console.log('upload Img => post',post)
+        console.log('upload files => post',files)
         const fileName = `hospital_state/${files[0].filename}`;
         const newFile = await this.findByIdAndUpdateImg(post.hospitalName, fileName)
         return newFile

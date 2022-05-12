@@ -1,7 +1,7 @@
 import {
     Body,
     Controller,
-    Get,
+    Get, Header,
     Logger, Param,
     Post,
     UploadedFile,
@@ -22,6 +22,7 @@ import {FilesInterceptor} from "@nestjs/platform-express";
 import {multerOptions} from "../common/utils/multer.options";
 import {ClientIp} from "../common/decorators/client-real-ip.decorator";
 import {VisitorEntity} from "../common/visitor/visitor.entity";
+import {ApiConsumes} from "@nestjs/swagger";
 
 @Controller('posts')
 export class PostsController {
@@ -48,10 +49,11 @@ export class PostsController {
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(OnlyPrivateInterceptor)
     async uploadImages(
-        @UploadedFiles() files: Array<Express.Multer.File>,
-        @CurrentUser() post: PostsEntity
+        @UploadedFile() files: Array<Express.Multer.File>,
+        @CurrentUser() post: PostsEntity,
     ) {
-
+        console.log('files ===>',files);
+        // postsService.upload 수정해야함.
         return this.postsService.uploadImg(post, files)
     }
 

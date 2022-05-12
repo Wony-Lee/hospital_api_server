@@ -35,13 +35,14 @@ const storage = (folder:string): multer.StorageEngine => {
                 ext
             )}${Date.now()}${ext}`
             cb(null, fileName)
-        }
+        },
     })
 }
 
 export const multerOptions = (folder: string) => {
     const result: MulterOptions = {
-        storage: storage(folder)
+        storage: storage(folder),
+        limits: { fileSize: 20 * 1024 * 1024 }
     }
     return result
 }
