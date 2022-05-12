@@ -26,7 +26,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             if (user) {
                 return user;
             } else {
-                console.log('========>1')
                 throw new Error('존재하지 않는 유저 입니다.')
             }
         } catch (error) {

@@ -79,9 +79,7 @@ class Application {
     )
     this.server.use(passport.initialize())
     this.server.use(passport.session())
-    this.server.useStaticAssets(path.join(__dirname, './common', 'uploads'), {
-      prefix: '/image'
-    })
+    this.server.useStaticAssets(path.join(__dirname, './common', 'uploads'), {})
     this.server.useGlobalInterceptors(
         new ClassSerializerInterceptor(this.server.get(Reflector)),
     )

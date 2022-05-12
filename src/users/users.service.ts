@@ -54,7 +54,6 @@ export class UsersService {
 
     async registerUser(userRegisterDTO: UserRegisterDTO):Promise<void> {
         const { email, password } = userRegisterDTO
-        console.log('email, password',email,password)
         const user = await this.usersRepository.findOne({email})
         if(user) {
             throw new UnauthorizedException('이미 존재하는 이메일 입니다.')

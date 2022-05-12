@@ -2,7 +2,7 @@ import {
     Body,
     Controller,
     Get,
-    Logger,
+    Logger, Param,
     Post,
     UploadedFile,
     UploadedFiles,
@@ -33,6 +33,11 @@ export class PostsController {
         private readonly postsRepository: Repository<PostsEntity>
     ){}
 
+    @Get(':hospitalName')
+    async getPost(@Param('hospitalName') hospitalName) {
+        return this.postsService.findOnePost(hospitalName)
+    }
+
     @Get()
     async getPosts() {
         return this.postsService.findAllPosts()
@@ -46,8 +51,7 @@ export class PostsController {
         @UploadedFiles() files: Array<Express.Multer.File>,
         @CurrentUser() post: PostsEntity
     ) {
-        // console.log('post ==>',post)
-        // console.log('files => ',files);
+
         return this.postsService.uploadImg(post, files)
     }
 
@@ -59,8 +63,6 @@ export class PostsController {
         @CurrentUser() currentUser: UserDTO,
         @Body() postsDTO: PostsDTO
     ) {
-        // console.log('visitor',typeof visitor)
-        // console.log('current User', currentUser.id)
         return this.postsService.createPosts(postsDTO,currentUser.id)
     }
 }

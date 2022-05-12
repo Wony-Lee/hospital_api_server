@@ -20,36 +20,40 @@ export class PostsService {
         return result
     }
 
+    async findOnePost(hospitalName: string) {
+        const post = await this.postsRepository.findOne(
+            { where:
+                    { hospitalName: hospitalName }
+            }
+        )
+        return post
+        // const post = await this.postsRepository.find()
+        // return post.filter(item => item.hospitalName === hospitalName)
+    }
+
     async createPosts(postsDTO: PostsDTO, id:string): Promise<void> {
         const { hospitalName, address, phoneNumber, category } = postsDTO
-        console.log('postsDTO =======>', postsDTO)
         validationCheck({ hospitalName, address, phoneNumber, category })
         await this.postsRepository.save({
             ...postsDTO,
             userId:id
         })
-
     }
 
     async findByIdAndUpdateImg(hospitalName: string, fileName:string) {
         const post = await this.postsRepository.findOne(hospitalName)
-        // console.log('findById fileName => ',fileName)
-        // console.log('findById Id =>', hospitalName)
-        // console.log('=>',post)
-        post.imgUrl = `http://localhost:8000/image/${fileName}`
-        if(hospitalName === post.hospitalName) {
-            const newPost = await this.postsRepository.save({
-                ...post
-            })
-            return newPost
-        }
+
+        post.imgUrl = `http://localhost:8000/${fileName}`
+        const newPost = await this.postsRepository.save({
+            ...post
+        })
+        return newPost
     }
 
     async uploadImg(post: PostsEntity, files:Express.Multer.File[]) {
         const fileName = `hospital_state/${files[0].filename}`;
-        // console.log(fileName)
         const newFile = await this.findByIdAndUpdateImg(post.hospitalName, fileName)
-        return fileName
+        return newFile
     }
 
 }
