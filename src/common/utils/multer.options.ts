@@ -25,10 +25,12 @@ const storage = (folder:string): multer.StorageEngine => {
     createFolder(folder)
     return multer.diskStorage({
         destination(req, file, cb) {
+            console.log('destination', req, file, cb)
             const folderName = path.join(__dirname, '..', `uploads/${folder}`)
             cb(null, folderName)
         },
         filename(req, file, cb) {
+            console.log('filename', req, file, cb)
             const ext = path.extname(file.originalname)
             const fileName = `${path.basename(
                 file.originalname,
@@ -40,6 +42,7 @@ const storage = (folder:string): multer.StorageEngine => {
 }
 
 export const multerOptions = (folder: string) => {
+    console.log('multerOptions', folder)
     const result: MulterOptions = {
         storage: storage(folder),
         limits: { fileSize: 20 * 1024 * 1024 }

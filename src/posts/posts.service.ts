@@ -54,6 +54,7 @@ export class PostsService {
         console.log('upload Img => post',post)
         console.log('upload files => post',files)
         const fileName = `hospital_state/${files[0].filename}`;
+        console.log('??',fileName)
         const newFile = await this.findByIdAndUpdateImg(post.hospitalName, fileName)
         return newFile
     }
