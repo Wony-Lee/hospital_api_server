@@ -63,6 +63,9 @@ class Application {
       origin: this.corsOriginList,
       credentials: true,
     })
+    this.server.useStaticAssets(path.join(__dirname, './common', 'upload'), {
+      prefix: '/hospital_image'
+    })
     this.server.use(expressSession({
       secret: process.env.SECRET_KEY, // 시크릿 키
       resave:false, // 세션을 저장하고 불러올 때 세션을 다시 저장할지 여부

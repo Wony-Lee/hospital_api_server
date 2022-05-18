@@ -4,7 +4,7 @@ import {
     Get,
     Logger,
     Param,
-    Post,
+    Post, Put, UploadedFile,
     UploadedFiles,
     UseGuards,
     UseInterceptors
@@ -22,6 +22,8 @@ import {FilesInterceptor} from "@nestjs/platform-express";
 import {multerOptions} from "../common/utils/multer.options";
 import {ClientIp} from "../common/decorators/client-real-ip.decorator";
 import {VisitorEntity} from "../common/visitor/visitor.entity";
+import {UserEntity} from "../users/users.entity";
+
 
 @Controller('posts')
 export class PostsController {
@@ -45,15 +47,14 @@ export class PostsController {
 
     @Post("upload")
     @UseInterceptors(FilesInterceptor('image', 10, multerOptions('hospital_state')))
-    // @UseGuards(JwtAuthGuard)
-    // @UseInterceptors(OnlyPrivateInterceptor)
+    @UseGuards(JwtAuthGuard)
+    @UseInterceptors(OnlyPrivateInterceptor)
     async uploadImages(
         @UploadedFiles() files: Array<Express.Multer.File>,
-        @CurrentUser() post: PostsEntity,
+        @CurrentUser() user: UserEntity,
+        @Body('hospitalName') hospitalName
     ) {
-        // postsService.upload 수정해야함.
-        console.log('upload 가기전에 거치나요?', post, files)
-        return this.postsService.uploadImg(post, files)
+        return this.postsService.uploadImg(hospitalName, files)
     }
 
     @Post()

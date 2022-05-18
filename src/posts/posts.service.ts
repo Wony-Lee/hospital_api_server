@@ -4,6 +4,7 @@ import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {PostsDTO} from "./dtos/posts.dto";
 import {validationCheck} from "../common/utils/validationCheck";
+import {UserEntity} from "../users/users.entity";
 
 
 @Injectable()
@@ -34,6 +35,7 @@ export class PostsService {
     async createPosts(postsDTO: PostsDTO, id:string): Promise<void> {
         const { hospitalName, address, phoneNumber, category } = postsDTO
         validationCheck({ hospitalName, address, phoneNumber, category })
+        console.log('=============>',postsDTO)
         await this.postsRepository.save({
             ...postsDTO,
             userId:id
@@ -41,21 +43,22 @@ export class PostsService {
     }
 
     async findByIdAndUpdateImg(hospitalName: string, fileName:string) {
-        const post = await this.postsRepository.findOne(hospitalName)
-
-        post.imgUrl = `http://localhost:8000/${fileName}`
+        console.log('id ===> ',hospitalName)
+        // const post = await this.postsRepository.findOne(hospitalName)
+        const post = await this.postsRepository.findOne(
+            { where:
+                { hospitalName: hospitalName }
+        })
+        post.imgUrl = `http://localhost:8080/hospital_image/${fileName}`
         const newPost = await this.postsRepository.save({
             ...post
         })
         return newPost
     }
 
-    async uploadImg(post: PostsEntity, files:Express.Multer.File[]) {
-        console.log('upload Img => post',post)
-        console.log('upload files => post',files)
+    async uploadImg(hospitalName, files:Express.Multer.File[]) {
         const fileName = `hospital_state/${files[0].filename}`;
-        console.log('??',fileName)
-        const newFile = await this.findByIdAndUpdateImg(post.hospitalName, fileName)
+        const newFile = await this.findByIdAndUpdateImg(hospitalName, fileName)
         return newFile
     }
 

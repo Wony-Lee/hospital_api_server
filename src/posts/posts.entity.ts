@@ -52,6 +52,11 @@ export class PostsEntity extends  CommonEntity {
     @Column({ type:'varchar', nullable: false })
     category: string
 
+    // @IsString()
+    // @IsNotEmpty({message: '병원 설명을 입력해주세요.'})
+    // @Column({type:'varchar', nullable:false})
+    // description: string
+
     @IsString()
     @Column({ type:'varchar', nullable: true })
     imgUrl:string

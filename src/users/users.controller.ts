@@ -10,6 +10,7 @@ import {JwtAuthGuard} from "./jwt/jwt.guard";
 import {OnlyPrivateInterceptor} from "../common/interceptors/only-private.interceptor";
 import {CurrentUser} from "../common/decorators/current-user.decotator";
 import {UserDTO} from "./dtos/user.dto";
+import * as expressSession from "express-session";
 
 @Controller('users')
 export class UsersController {
@@ -44,11 +45,12 @@ export class UsersController {
            userLoginDTO.password
        )
         response.cookie('jwt', jwt, { httpOnly: true })
-        return user
+        return {user, token:jwt}
     }
 
     @Post('logout')
     async logOut(@Res({passthrough: true}) response:Response) {
         response.clearCookie('jwt')
+
     }
 }
